@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -eu
+cc='g++ -W -Wall -pedantic -std=c++11'
+for d in v1 v2_bad v2_good; do
+  $cc -fPIC -c -o "$d/mylib.o" "$d/mylib.cpp"
+  $cc -L . -shared -o "$d/libmylib.so" "$d/mylib.o"
+done
+
+$cc -I v1 -L v1 -o main.out main.cpp -lmylib
+LD_LIBRARY_PATH=v1 ./main.out
+LD_LIBRARY_PATH=v2_good ./main.out
+! LD_LIBRARY_PATH=v2_bad ./main.out # ! -> to continue the following
+$cc -I v2_bad -L v2_bad -o main.out main.cpp -lmylib
+LD_LIBRARY_PATH=v2_bad ./main.out

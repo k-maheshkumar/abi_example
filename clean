@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+rm -rf v1/*.o v1/*.so v2_good/*.o v2_good/*.so v2_bad/*.o v2_bad/*.so  *.out
